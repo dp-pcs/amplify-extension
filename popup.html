@@ -1,0 +1,186 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Amplifier — Substack Cookie Sync</title>
+  <style>
+    * {
+      margin: 0;
+      padding: 0;
+      box-sizing: border-box;
+    }
+
+    body {
+      width: 360px;
+      height: 200px;
+      font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif;
+      background: white;
+      padding: 20px;
+      display: flex;
+      flex-direction: column;
+      gap: 16px;
+    }
+
+    .header {
+      display: flex;
+      align-items: center;
+      gap: 8px;
+      padding-bottom: 12px;
+      border-bottom: 1px solid #e5e7eb;
+    }
+
+    .logo {
+      width: 24px;
+      height: 24px;
+      background: #8B5CF6;
+      border-radius: 6px;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      color: white;
+      font-weight: bold;
+      font-size: 14px;
+    }
+
+    .title {
+      font-size: 16px;
+      font-weight: 600;
+      color: #111827;
+    }
+
+    .status {
+      min-height: 40px;
+      padding: 10px;
+      border-radius: 6px;
+      font-size: 14px;
+      text-align: center;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+    }
+
+    .status.idle {
+      background: #f3f4f6;
+      color: #6b7280;
+    }
+
+    .status.syncing {
+      background: #fef3c7;
+      color: #92400e;
+    }
+
+    .status.success {
+      background: #d1fae5;
+      color: #065f46;
+    }
+
+    .status.error {
+      background: #fee2e2;
+      color: #991b1b;
+    }
+
+    .sync-button {
+      width: 100%;
+      padding: 12px;
+      background: #8B5CF6;
+      color: white;
+      border: none;
+      border-radius: 8px;
+      font-size: 14px;
+      font-weight: 600;
+      cursor: pointer;
+      transition: background 0.2s;
+    }
+
+    .sync-button:hover {
+      background: #7C3AED;
+    }
+
+    .sync-button:active {
+      background: #6D28D9;
+    }
+
+    .sync-button:disabled {
+      background: #d1d5db;
+      cursor: not-allowed;
+    }
+
+    .footer {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      font-size: 11px;
+      color: #6b7280;
+      margin-top: auto;
+    }
+
+    .toggle-container {
+      display: flex;
+      align-items: center;
+      gap: 6px;
+    }
+
+    .toggle {
+      position: relative;
+      width: 32px;
+      height: 18px;
+      background: #d1d5db;
+      border-radius: 9px;
+      cursor: pointer;
+      transition: background 0.2s;
+    }
+
+    .toggle.active {
+      background: #8B5CF6;
+    }
+
+    .toggle-knob {
+      position: absolute;
+      top: 2px;
+      left: 2px;
+      width: 14px;
+      height: 14px;
+      background: white;
+      border-radius: 50%;
+      transition: left 0.2s;
+    }
+
+    .toggle.active .toggle-knob {
+      left: 16px;
+    }
+
+    .target {
+      font-weight: 500;
+    }
+  </style>
+</head>
+<body>
+  <div class="header">
+    <div class="logo">A</div>
+    <div class="title">Amplifier</div>
+  </div>
+
+  <div id="status" class="status idle">
+    Ready to sync your Substack cookie
+  </div>
+
+  <button id="syncButton" class="sync-button">
+    Sync Cookie to Amplifier
+  </button>
+
+  <div class="footer">
+    <div class="toggle-container">
+      <span>Dev mode</span>
+      <div id="devToggle" class="toggle">
+        <div class="toggle-knob"></div>
+      </div>
+    </div>
+    <div class="target">
+      Target: <span id="targetUrl">amplify.elelem.expert</span>
+    </div>
+  </div>
+
+  <script src="popup.js"></script>
+</body>
+</html>
