@@ -5,135 +5,151 @@
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <title>Amplifier — Substack Cookie Sync</title>
   <style>
-    * {
-      margin: 0;
-      padding: 0;
-      box-sizing: border-box;
+    * { margin: 0; padding: 0; box-sizing: border-box; }
+
+    :root {
+      --amp-accent:        #2563EB;
+      --amp-accent-hover:  #1D4ED8;
+      --amp-accent-active: #1E40AF;
+      --amp-accent-light:  #EFF6FF;
+      --amp-text:          #0F172A;
+      --amp-text-sec:      #475569;
+      --amp-text-muted:    #94A3B8;
+      --amp-border:        #E2E8F0;
+      --amp-surface:       #FFFFFF;
+      --amp-bg:            #F8FAFC;
+      --amp-success:       #16A34A;
+      --amp-success-bg:    #F0FDF4;
+      --amp-warning:       #D97706;
+      --amp-warning-bg:    #FFFBEB;
+      --amp-danger:        #DC2626;
+      --amp-danger-bg:     #FEF2F2;
     }
 
     body {
       width: 360px;
-      height: 200px;
+      min-height: 220px;
       font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif;
-      background: white;
+      background: var(--amp-surface);
       padding: 20px;
       display: flex;
       flex-direction: column;
       gap: 16px;
+      color: var(--amp-text);
     }
 
     .header {
       display: flex;
       align-items: center;
-      gap: 8px;
-      padding-bottom: 12px;
-      border-bottom: 1px solid #e5e7eb;
+      gap: 10px;
+      padding-bottom: 14px;
+      border-bottom: 1px solid var(--amp-border);
     }
 
     .logo {
-      width: 24px;
-      height: 24px;
-      background: #8B5CF6;
-      border-radius: 6px;
+      width: 28px;
+      height: 28px;
+      background: var(--amp-accent);
+      border-radius: 7px;
       display: flex;
       align-items: center;
       justify-content: center;
-      color: white;
-      font-weight: bold;
-      font-size: 14px;
     }
+    .logo svg { display: block; }
 
     .title {
-      font-size: 16px;
-      font-weight: 600;
-      color: #111827;
+      font-size: 15px;
+      font-weight: 700;
+      color: var(--amp-text);
+      letter-spacing: -0.01em;
+    }
+    .subtitle {
+      font-size: 11px;
+      color: var(--amp-text-muted);
+      margin-top: 1px;
     }
 
     .status {
-      min-height: 40px;
-      padding: 10px;
-      border-radius: 6px;
-      font-size: 14px;
+      min-height: 44px;
+      padding: 11px 12px;
+      border-radius: 8px;
+      font-size: 13px;
+      line-height: 1.35;
       text-align: center;
       display: flex;
       align-items: center;
       justify-content: center;
+      gap: 6px;
+      border: 1px solid transparent;
     }
 
     .status.idle {
-      background: #f3f4f6;
-      color: #6b7280;
+      background: var(--amp-bg);
+      color: var(--amp-text-sec);
+      border-color: var(--amp-border);
     }
-
     .status.syncing {
-      background: #fef3c7;
-      color: #92400e;
+      background: var(--amp-warning-bg);
+      color: var(--amp-warning);
+      border-color: #FDE68A;
     }
-
     .status.success {
-      background: #d1fae5;
-      color: #065f46;
+      background: var(--amp-success-bg);
+      color: var(--amp-success);
+      border-color: #BBF7D0;
+    }
+    .status.error {
+      background: var(--amp-danger-bg);
+      color: var(--amp-danger);
+      border-color: #FECACA;
     }
 
-    .status.error {
-      background: #fee2e2;
-      color: #991b1b;
+    .status .dot {
+      width: 6px;
+      height: 6px;
+      border-radius: 50%;
+      background: currentColor;
+      flex-shrink: 0;
     }
 
     .sync-button {
       width: 100%;
       padding: 12px;
-      background: #8B5CF6;
+      background: var(--amp-accent);
       color: white;
       border: none;
       border-radius: 8px;
       font-size: 14px;
       font-weight: 600;
       cursor: pointer;
-      transition: background 0.2s;
+      transition: background 0.15s, transform 0.05s;
     }
-
-    .sync-button:hover {
-      background: #7C3AED;
-    }
-
-    .sync-button:active {
-      background: #6D28D9;
-    }
-
-    .sync-button:disabled {
-      background: #d1d5db;
-      cursor: not-allowed;
-    }
+    .sync-button:hover:not(:disabled) { background: var(--amp-accent-hover); }
+    .sync-button:active:not(:disabled) { background: var(--amp-accent-active); transform: translateY(1px); }
+    .sync-button:disabled { background: #CBD5E1; cursor: not-allowed; }
 
     .footer {
       display: flex;
       justify-content: space-between;
       align-items: center;
       font-size: 11px;
-      color: #6b7280;
+      color: var(--amp-text-muted);
       margin-top: auto;
+      padding-top: 4px;
     }
 
-    .toggle-container {
-      display: flex;
-      align-items: center;
-      gap: 6px;
-    }
+    .toggle-container { display: flex; align-items: center; gap: 6px; }
 
     .toggle {
       position: relative;
       width: 32px;
       height: 18px;
-      background: #d1d5db;
+      background: #CBD5E1;
       border-radius: 9px;
       cursor: pointer;
-      transition: background 0.2s;
+      transition: background 0.15s;
     }
-
-    .toggle.active {
-      background: #8B5CF6;
-    }
+    .toggle.active { background: var(--amp-accent); }
 
     .toggle-knob {
       position: absolute;
@@ -143,25 +159,31 @@
       height: 14px;
       background: white;
       border-radius: 50%;
-      transition: left 0.2s;
+      transition: left 0.15s;
+      box-shadow: 0 1px 2px rgba(15, 23, 42, 0.15);
     }
+    .toggle.active .toggle-knob { left: 16px; }
 
-    .toggle.active .toggle-knob {
-      left: 16px;
-    }
-
-    .target {
-      font-weight: 500;
-    }
+    .target { font-weight: 500; color: var(--amp-text-sec); }
+    .target span { color: var(--amp-text); }
   </style>
 </head>
 <body>
   <div class="header">
-    <div class="logo">A</div>
-    <div class="title">Amplifier</div>
+    <div class="logo">
+      <svg width="18" height="18" viewBox="0 0 100 100" xmlns="http://www.w3.org/2000/svg">
+        <path d="M22 78 L50 20 L78 78 L66 78 L50 42 L34 78 Z" fill="#FFFFFF"/>
+        <rect x="36" y="55" width="28" height="9" fill="#FFFFFF"/>
+      </svg>
+    </div>
+    <div>
+      <div class="title">Amplifier</div>
+      <div class="subtitle">Substack cookie sync</div>
+    </div>
   </div>
 
   <div id="status" class="status idle">
+    <span class="dot"></span>
     Ready to sync your Substack cookie
   </div>
 
